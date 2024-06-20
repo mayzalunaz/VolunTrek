@@ -32,8 +32,9 @@ switch ($method) {
         $stmt->bind_param("sss", $judul, $deskripsi, $image);
 
         if ($stmt->execute()) {
+            $last_id = $stmt->insert_id;
             http_response_code(201);
-            echo json_encode(["status" => "success", "message" => "Article created successfully", "id_berita" => $stmt->insert_id]);
+            echo json_encode(["status" => "success", "message" => "Article created successfully", "id_berita" => $last_id]);
         } else {
             http_response_code(500);
             echo json_encode(["status" => "error", "message" => "Unable to create article", "error" => $stmt->error]);

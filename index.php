@@ -1,5 +1,24 @@
 <?php
-require_once 'connection.php';
+require_once 'connection.php'; // Include your database connection file
+require_once 'vendor/autoload.php';
+
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+$key = '6a8f2e4c923e46ff1e8fa10d8a0f8b4d2f5c3e78e0b1a25f8e2d3f4c5a6b7c8d';
+
+if (isset($_COOKIE['token'])) {
+    $token = $_COOKIE['token'];
+    try {
+        $decoded = JWT::decode($token, new Key($key, 'HS256'));
+    } catch (Exception $e) {
+        header('location:login.php');
+        exit;
+    }
+} else {
+    header('location:login.php');
+    exit;
+}
 
 $sql = "SELECT * FROM berita ORDER BY id_berita DESC LIMIT 3";
 $berita_result = $conn->query($sql);
